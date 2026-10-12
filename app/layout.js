@@ -1,5 +1,8 @@
 import './globals.css';
-export const metadata = { title: 'Chelsie Trend Closet', description: 'Trendy clothes, ordered via WhatsApp' };
+export const metadata = {
+  title: 'Chelsie Trend Closet | Your style, your story',
+  description: 'Find your next favourite outfit at Chelsie Trend Closet. Shop fresh finds and order easily on WhatsApp.',
+};
 export default function RootLayout({ children }) {
-  return (<html lang="en"><head><meta name="viewport" content="width=device-width, initial-scale=1" /></head><body>{children}</body></html>);
+  return (<html lang="en"><body>{children}</body></html>);
 }

@@ -12,16 +12,22 @@ export async function GET(req) {
 export async function POST(req) {
   if (!isAdmin(req)) return NextResponse.json({ error: 'Wrong password' }, { status: 401 });
   const { product_id, qty, selling_price } = await req.json();
-  const q = parseInt(qty), db = sb();
-  const { data: p } = await db.from('products').select('*').eq('id', product_id).single();
-  if (!p || !(q > 0)) return NextResponse.json({ error: 'Invalid sale' }, { status: 400 });
-  if ((p.stock || 0) < q) return NextResponse.json({ error: `Only ${p.stock || 0} in stock` }, { status: 400 });
-  // prices are snapshotted so history stays correct if prices change later
-  const { error } = await db.from('sales').insert({
-    product_id: p.id, product_name: p.name, qty: q,
-    buying_price: p.buying_price || 0, selling_price: Number(selling_price ?? p.price),
+  const quantity = Number(qty);
+  const price = Number(selling_price);
+  if (typeof product_id !== 'string' || !product_id ||
+      !Number.isInteger(quantity) || quantity < 1 ||
+      !Number.isFinite(price) || price < 0) {
+    return NextResponse.json({ error: 'Provide a product, a positive whole-number quantity, and a valid selling price.' }, { status: 400 });
+  }
+  const { error } = await sb().rpc('record_product_sale', {
+    p_product_id: product_id,
+    p_qty: quantity,
+    p_selling_price: price,
   });
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  await db.from('products').update({ stock: p.stock - q }).eq('id', p.id);
+  if (error) {
+    if (error.message === 'insufficient_stock') return NextResponse.json({ error: 'There is not enough stock to record this sale.' }, { status: 400 });
+    if (error.message === 'product_not_found') return NextResponse.json({ error: 'That product no longer exists.' }, { status: 404 });
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
   return NextResponse.json({ ok: true });
 }

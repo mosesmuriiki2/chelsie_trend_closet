@@ -1,7 +1,7 @@
 # Chelsie Trend Closet
 
-## 1. Supabase (free) – supabase.com
-Create a project, then in SQL Editor run:
+## 1. Supabase – supabase.com
+Create a project, then in SQL Editor run this table definition for a new setup:
 
     create table products(
       id uuid primary key default gen_random_uuid(),
@@ -9,11 +9,12 @@ Create a project, then in SQL Editor run:
       description text, sizes text, image_url text,
       created_at timestamptz default now());
 
+For both new and existing setups, run `migration.sql` after the table exists. It adds inventory and catalog fields, creates sales tracking, and installs the atomic stock-and-sale operation.
+
 Storage -> New bucket named `products` -> tick **Public bucket**.
 Settings -> API: copy the Project URL and the `service_role` key.
 
-If you already ran the first SQL, just run `migration.sql` instead of re-creating the table.
-(New setups: run the SQL above, then `migration.sql`.)
+To show categories on the shop, set each product's category in the admin dashboard. Mark products as popular in Inventory to feature them on the storefront.
 
 ## 2. Run locally
     cp .env.example .env.local   # fill in values
