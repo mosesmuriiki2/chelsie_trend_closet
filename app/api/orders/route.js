@@ -78,7 +78,7 @@ export async function POST(request) {
   if (settingsError) return NextResponse.json({ error: 'Checkout is temporarily unavailable. Please try WhatsApp directly.' }, { status: 503 });
   const deliveryFee = customer.delivery_method === 'pickup' ||
     (settings.free_delivery_threshold != null && authoritativeSubtotal >= Number(settings.free_delivery_threshold))
-    ? 0 : Number(settings.delivery_fee || 0);
+    ? 0 : Math.max(200, Number(settings.delivery_fee || 200));
   const safeCustomer = {
     customer_name: customerName,
     phone,

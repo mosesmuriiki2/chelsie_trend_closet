@@ -30,10 +30,13 @@ export async function PATCH(request) {
       return NextResponse.json({ error: `${field.replaceAll('_', ' ')} must be 2,000 characters or fewer.` }, { status: 400 });
     }
   }
-  for (const field of ['delivery_fee', 'free_delivery_threshold']) {
-    if (update[field] != null && (!Number.isFinite(Number(update[field])) || Number(update[field]) < 0)) {
-      return NextResponse.json({ error: `${field.replaceAll('_', ' ')} must be a non-negative amount.` }, { status: 400 });
-    }
+  if (update.delivery_fee != null &&
+      (!Number.isFinite(Number(update.delivery_fee)) || Number(update.delivery_fee) < 200)) {
+    return NextResponse.json({ error: 'Delivery fee must be at least KES 200.' }, { status: 400 });
+  }
+  if (update.free_delivery_threshold != null &&
+      (!Number.isFinite(Number(update.free_delivery_threshold)) || Number(update.free_delivery_threshold) < 0)) {
+    return NextResponse.json({ error: 'Free delivery threshold must be a non-negative amount.' }, { status: 400 });
   }
   if (update.low_stock_threshold != null && (!Number.isInteger(Number(update.low_stock_threshold)) || Number(update.low_stock_threshold) < 0)) {
     return NextResponse.json({ error: 'Low-stock threshold must be a non-negative whole number.' }, { status: 400 });

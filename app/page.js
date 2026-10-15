@@ -52,7 +52,8 @@ export default function Home() {
   const [languageReady, setLanguageReady] = useState(false);
   const t = key => translate(language, key);
   const currency = settings.currency || 'KES';
-  const waNumber = settings.whatsapp_number || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
+  const waNumber = settings.whatsapp_number || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '254717723059';
+  const shopLocation = settings.contact_text || 'Superior Center, 1st Floor, Shop F38, Kenyatta Avenue, opposite Kimathi Street';
   const activeSlides = useMemo(() => {
     const configured = Array.isArray(settings.banners) ? settings.banners.filter(banner => banner.image_url || banner.image) : [];
     return configured.length
@@ -158,7 +159,7 @@ export default function Home() {
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
   const deliveryFee = deliveryMethod === 'pickup' ||
     (settings.free_delivery_threshold != null && subtotal >= Number(settings.free_delivery_threshold))
-    ? 0 : Number(settings.delivery_fee || 0);
+    ? 0 : Math.max(200, Number(settings.delivery_fee || 200));
   const total = subtotal + deliveryFee;
 
   const add = (product, quantity = 1, chosenSize, chosenColour) => {
@@ -446,7 +447,8 @@ export default function Home() {
         <span>{settings.footer_text || t('footer')} <b>♡</b></span>
         <div className="footer-links">{Object.entries(settings.social_links || {}).filter(([, url]) => typeof url === 'string' && url.startsWith('https://')).map(([label, url]) =>
           <a href={url} key={label} target="_blank" rel="noreferrer">{label}</a>)}
-          {settings.contact_text && <span>{settings.contact_text}</span>}<a href="/admin">{t('staffSignIn')} ↗</a></div>
+          <a href={`tel:+${waNumber.replace(/[^\d]/g, '')}`}>{waNumber}</a><span>{shopLocation}</span>
+          <a href="/admin">{t('staffSignIn')} ↗</a></div>
       </footer>
 
       {toast && <div className="shop-toast" role="status">{toast}</div>}

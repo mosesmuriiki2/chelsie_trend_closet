@@ -136,7 +136,7 @@ create table if not exists public.settings (
   announcement text not null default '',
   whatsapp_number text,
   currency text not null default 'KES',
-  delivery_fee numeric not null default 0,
+  delivery_fee numeric not null default 200,
   free_delivery_threshold numeric,
   low_stock_threshold integer not null default 3,
   social_links jsonb not null default '{}'::jsonb,
@@ -149,6 +149,11 @@ create table if not exists public.settings (
 );
 
 insert into public.settings (id) values (true) on conflict (id) do nothing;
+update public.settings
+set whatsapp_number = coalesce(nullif(trim(whatsapp_number), ''), '254717723059'),
+    contact_text = coalesce(nullif(trim(contact_text), ''), 'Superior Center, 1st Floor, Shop F38, Kenyatta Avenue, opposite Kimathi Street'),
+    delivery_fee = greatest(coalesce(delivery_fee, 200), 200)
+where id = true;
 
 create table if not exists public.trending_keywords (
   id uuid primary key default gen_random_uuid(),

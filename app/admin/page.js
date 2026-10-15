@@ -591,7 +591,7 @@ export default function Admin() {
         <label>Announcement bar<input name="announcement" defaultValue={settings.announcement || ''} maxLength="200" /></label>
         <div className="form-row"><label>WhatsApp number<input name="whatsapp_number" defaultValue={settings.whatsapp_number || ''} placeholder="2547..." /></label>
           <label>Currency code<input name="currency" defaultValue={settings.currency || 'KES'} maxLength="4" /></label></div>
-        <div className="form-row"><label>Delivery fee<input name="delivery_fee" type="number" min="0" step="1" defaultValue={settings.delivery_fee || 0} /></label>
+        <div className="form-row"><label>Delivery fee (minimum KES 200)<input name="delivery_fee" type="number" min="200" step="1" defaultValue={Math.max(200, Number(settings.delivery_fee) || 0)} /></label>
           <label>Free delivery above<input name="free_delivery_threshold" type="number" min="0" step="1" defaultValue={settings.free_delivery_threshold || ''} /></label>
           <label>Low-stock alert at<input name="low_stock_threshold" type="number" min="0" defaultValue={settings.low_stock_threshold ?? 3} /></label></div>
         <div className="form-row"><label>Default language<select name="default_language" defaultValue={settings.default_language || 'en'}><option value="en">English</option><option value="sw">Kiswahili</option></select></label>

@@ -62,7 +62,7 @@ Open `/` for the shop and `/admin` for the dashboard.
 
 - Customers can browse categories, search, filter by size and price, sort, view product details and galleries, select size/colour, save a bag in local storage, and switch between English and Kiswahili.
 - Checkout records an order and item/price snapshots before opening WhatsApp. If the database is unavailable, the WhatsApp message still opens with the order details.
-- Store settings control the brand, announcement, theme, hero banners, WhatsApp number, currency, delivery fee, free-delivery threshold, footer/contact content, social links, and WhatsApp message template.
+- Store settings control the brand, announcement, theme, hero banners, WhatsApp number, currency, delivery fee (minimum KES 200 for delivery), free-delivery threshold, footer/contact content, social links, and WhatsApp message template. Pickup and orders meeting the configured free-delivery threshold remain free.
 - The supplied shop logo is stored at `public/chelsie-logo.jpeg` and also supplies the browser icon.
 
 ## Admin guide
